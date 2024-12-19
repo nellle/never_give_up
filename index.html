@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Лог боя</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0; /* Убираем стандартные отступы body */
+        }
+        #header {
+            display: flex;
+            justify-content: flex-end; /* Выравниваем элементы по правому краю */
+            align-items: center; /* Выравниваем элементы по вертикали */
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        #user-info {
+            display: flex;
+            align-items: center;
+        }
+        #user-photo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        #log-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px;
+            max-height: calc(100vh - 150px); /* Высота с учетом заголовка и отступов */
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+        }
+        #error-message {
+            color: red;
+            display: none;
+            text-align: center; /* Центрируем сообщение об ошибке */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div id="user-info">
+            <img id="user-photo" src="" alt="Аватарка">
+            <span id="user-name"></span>
+        </div>
+    </div>
+    <button id="get-log-button" style="margin: 20px auto; display: block;">Получить лог</button>
+    <div id="log-container">
+        </div>
+        <div id="error-message">
+        Произошла ошибка при загрузке лога.
+    </div>
+
+    <script>
+        const getLogButton = document.getElementById('get-log-button');
+        const logContainer = document.getElementById('log-container');
+        const userPhoto = document.getElementById('user-photo');
+        const userName = document.getElementById('user-name');
+        const errorMessage = document.getElementById('error-message');
+
+        // Получаем данные пользователя из Telegram Web Apps API
+        Telegram.WebApp.ready(); // Ждем, пока Web App будет готов
+        const userData = Telegram.WebApp.initDataUnsafe?.user;
+
+        if (userData) {
+            userPhoto.src = `https://t.me/i/userpic/320/${userData.id}.jpg`; // Формируем URL аватарки
+            userName.textContent = userData.first_name + (userData.last_name ? ' ' + userData.last_name : '');
+        } else {
+            userName.textContent = "Не удалось получить данные пользователя";
+        }
+
+        getLogButton.addEventListener('click', () => {
+            logContainer.innerHTML = "<p style='text-align: center;'>Загрузка...</p>"; // Отображаем сообщение о загрузке по центру
+            errorMessage.style.display = 'none';
+
+            logContainer.innerHTML = '';
+                    log.forEach(entry => {
+                        const logEntry = document.createElement('div');
+                        logEntry.className = 'log-entry';
+                        logEntry.textContent = entry;
+                        logContainer.appendChild(logEntry);
+                    });
+        });
+    </script>
+</body>
+</html>
