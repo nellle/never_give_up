@@ -63,16 +63,6 @@
         const userName = document.getElementById('user-name');
         const errorMessage = document.getElementById('error-message');
 
-        // Получаем данные пользователя из Telegram Web Apps API
-        Telegram.WebApp.ready(); // Ждем, пока Web App будет готов
-        const userData = Telegram.WebApp.initDataUnsafe?.user;
-
-        if (userData) {
-            userPhoto.src = `https://t.me/i/userpic/320/${userData.id}.jpg`; // Формируем URL аватарки
-            userName.textContent = userData.first_name + (userData.last_name ? ' ' + userData.last_name : '');
-        } else {
-            userName.textContent = "Не удалось получить данные пользователя";
-        }
 
         getLogButton.addEventListener('click', () => {
             logContainer.innerHTML = "<p style='text-align: center;'>Загрузка...</p>"; // Отображаем сообщение о загрузке по центру
